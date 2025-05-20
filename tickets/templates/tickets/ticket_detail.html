@@ -1,0 +1,124 @@
+{% extends 'tickets/base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}Ticket: {{ ticket.title }}{% endblock %}
+{% block content %}
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="h3 mb-2">{{ ticket.title }}</h1>
+            <div class="d-flex align-items-center text-muted mb-4">
+                <span class="me-3">
+                    <i class="fas fa-calendar-alt me-1"></i> 
+                    {{ ticket.created_at|date:"M d, Y" }}
+                </span>
+                <span class="me-3">
+                    <i class="fas fa-user me-1"></i> 
+                    {{ ticket.created_by.username }}
+                </span>
+                <span>
+                    {% if ticket.status == 'OPEN' %}
+                        <span class="badge bg-warning text-dark">Open</span>
+                    {% elif ticket.status == 'IN_PROGRESS' %}
+                        <span class="badge bg-primary">In Progress</span>
+                    {% elif ticket.status == 'RESOLVED' %}
+                        <span class="badge bg-success">Resolved</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Closed</span>
+                    {% endif %}
+                </span>
+                <span class="ms-2">
+                    {% if ticket.priority == 'HIGH' %}
+                        <span class="badge bg-danger">High Priority</span>
+                    {% elif ticket.priority == 'MEDIUM' %}
+                        <span class="badge bg-warning text-dark">Medium Priority</span>
+                    {% else %}
+                        <span class="badge bg-info">Low Priority</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'ticket_list' %}" class="btn btn-custom">
+                <i class="fas fa-arrow-left me-1"></i> Back
+            </a>
+            <a href="{% url 'edit_ticket' ticket.pk %}" class="btn btn-custom ms-2">
+                <i class="fas fa-edit me-1"></i> Edit
+            </a>
+            <a href="{% url 'delete_ticket' ticket.pk %}" class="btn btn-danger ms-2">
+                <i class="fas fa-trash me-1"></i> Delete
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Ticket Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3 fw-bold">Description:</div>
+                        <div class="col-md-9">{{ ticket.description }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3 fw-bold">Assignee:</div>
+                        <div class="col-md-9">
+                            {% if ticket.assignee %}
+                                <span class="badge bg-success p-2">
+                                    <i class="fas fa-user me-1"></i> {{ ticket.assignee.username }}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary p-2">Unassigned</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3 fw-bold">Last Updated:</div>
+                        <div class="col-md-9">{{ ticket.updated_at|date:"M d, Y H:i" }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 fw-bold">Resolution Notes:</div>
+                        <div class="col-md-9">
+                            {% if ticket.resolution_notes %}
+                                {{ ticket.resolution_notes }}
+                            {% else %}
+                                <span class="text-muted">No resolution notes yet.</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0"><i class="fas fa-history me-2"></i>Edit History</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if ticket_history %}
+                        <ul class="list-group list-group-flush">
+                            {% for entry in ticket_history %}
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-bold">{{ entry.user }}</span>
+                                        <small class="text-muted">{{ entry.timestamp|timesince }} ago</small>
+                                    </div>
+                                    <div>
+                                        Changed <span class="text-primary">{{ entry.field_changed }}</span> from 
+                                        <span class="fst-italic">"{{ entry.old_value }}"</span> to 
+                                        <span class="fw-semibold">"{{ entry.new_value }}"</span>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="text-center p-4 text-muted">
+                            <i class="fas fa-info-circle me-1"></i> No edit history recorded
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,421 @@
+:root {
+    --bg: #f5f8fc;
+    --highlight: #2c6ed1;
+    --text: #2c3e50;
+    --accent: #1d5daa;
+    --button: #0d47a1;
+    --button-text: #ffffff;
+    --card-bg: #ffffff;
+    --border: #d9e1ea;
+    --success: #00897b;
+    --warning: #ff8f00;
+    --danger: #d32f2f;
+    --shadow: rgba(0, 0, 0, 0.05);
+    --hover-bg: rgba(44, 110, 209, 0.1);
+}
+
+[data-theme="dark"] {
+    --bg: #121212;
+    --highlight: #1976d2;
+    --text: #ffffff;
+    --accent: #4d90fe;
+    --button: #1565c0;
+    --button-text: #ffffff;
+    --card-bg: #1e1e1e;
+    --border: #333333;
+    --success: #00796b;
+    --warning: #f57c00;
+    --danger: #c62828;
+    --shadow: rgba(0, 0, 0, 0.2);
+    --hover-bg: rgba(25, 118, 210, 0.15);
+    --search-btn-bg: #1976d2;
+    --search-icon-color: #ffffff;
+    --content-bg: #1a2535;
+    --content-text: #ffffff;
+    --secondary-bg: #2a2a2a;
+    --tertiary-bg: #333333;
+    --muted-text: #cccccc;
+    --link-color: #58a6ff;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: all 0.3s ease;
+    line-height: 1.6;
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 10px var(--shadow);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 1rem;
+}
+
+.navbar-brand {
+    color: var(--highlight) !important;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.nav-link {
+    color: var(--text) !important;
+    font-weight: 500;
+    margin: 0 0.25rem;
+    padding: 0.5rem 0.8rem !important;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    background-color: var(--hover-bg);
+    color: var(--highlight) !important;
+}
+
+/* Button styling */
+.btn-custom {
+    background-color: var(--button) !important;
+    color: var(--button-text) !important;
+    border: none !important;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    box-shadow: 0 2px 5px var(--shadow);
+}
+
+.btn-custom:hover {
+    background-color: var(--accent) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px var(--shadow);
+}
+
+.btn-danger {
+    background-color: var(--danger) !important;
+    color: var(--button-text) !important;
+}
+
+/* Card and container styling */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px var(--shadow);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.container {
+    padding: 2rem 1rem;
+}
+
+/* Table styling */
+.table {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.table thead th {
+    background-color: var(--hover-bg);
+    color: var(--accent);
+    border-bottom: 2px solid var(--highlight);
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: var(--hover-bg);
+}
+
+.table td {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    border-top: 1px solid var(--border);
+}
+
+/* Form controls */
+.form-control {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--card-bg);
+    color: var(--text);
+}
+
+.form-control:focus {
+    border-color: var(--highlight);
+    box-shadow: 0 0 0 0.2rem rgba(44, 110, 209, 0.25);
+}
+
+/* Stat cards */
+.card.text-center {
+    transition: all 0.3s;
+}
+
+.card.text-center:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px var(--shadow);
+}
+
+.card.text-center .card-body h5 {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.card.text-center .card-body .display-6 {
+    color: var(--highlight);
+    font-weight: 700;
+}
+
+/* Lists */
+.list-group-item {
+    background-color: var(--card-bg);
+    color: var(--text);
+    border-color: var(--border);
+    padding: 0.75rem 1rem;
+    transition: all 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: var(--hover-bg);
+}
+
+/* Theme toggle */
+.theme-toggle {
+    position: fixed;
+    top: 70px;
+    right: 15px;
+    z-index: 1000;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px var(--shadow);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.theme-toggle:hover {
+    transform: rotate(30deg);
+}
+
+/* Links */
+a {
+    color: var(--highlight);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+a:hover {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* Charts */
+.chart-container {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px var(--shadow);
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Badges and status indicators */
+.badge.bg-primary {
+    background-color: var(--highlight) !important;
+}
+
+.badge.bg-info {
+    background-color: #29b6f6 !important;
+}
+
+.text-primary {
+    color: var(--highlight) !important;
+}
+
+/* Make sure all buttons use our colors */
+.btn-primary {
+    background-color: var(--button) !important;
+    border-color: var(--button) !important;
+}
+
+.btn-secondary {
+    background-color: #546e7a !important;
+    border-color: #455a64 !important;
+}
+
+/* Logout form styling */
+#logout-form {
+    display: flex;
+    align-items: center;
+}
+
+#logout-form button {
+    color: var(--text) !important;
+    font-weight: 500;
+    margin: 0 0.25rem;
+    padding: 0.5rem 0.8rem !important;
+    border-radius: 4px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+#logout-form button:hover {
+    background-color: var(--hover-bg);
+    color: var(--highlight) !important;
+}
+
+/* Search form styles */
+[data-theme="dark"] .input-group-text {
+    background-color: var(--search-btn-bg) !important;
+    border-color: var(--search-btn-bg) !important;
+    color: var(--search-icon-color) !important;
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--secondary-bg) !important;
+    color: var(--content-text) !important;
+}
+
+[data-theme="dark"] .table {
+    background-color: #222222 !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .table thead th {
+    background-color: #262626 !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid var(--accent) !important;
+}
+
+[data-theme="dark"] .table tbody tr {
+    background-color: #222222 !important;
+}
+
+[data-theme="dark"] .table tbody tr:hover {
+    background-color: #2c2c2c !important;
+}
+
+/* Ticket list specific adjustments */
+[data-theme="dark"] .table tbody td {
+    background-color: #222222 !important;
+    border-color: #333333 !important;
+    color: #ffffff !important;
+}
+
+/* Table headers */
+[data-theme="dark"] .card-header h5 {
+    color: #ffffff !important;
+}
+
+/* Title links in tables - keep these blue for distinction */
+[data-theme="dark"] .table a {
+    color: var(--link-color) !important;
+}
+
+/* Make sure all text in tables is white */
+[data-theme="dark"] .table td,
+[data-theme="dark"] .table th,
+[data-theme="dark"] .table span:not(.badge) {
+    color: #ffffff !important;
+}
+
+/* Links in dark mode */
+[data-theme="dark"] a {
+    color: var(--link-color) !important;
+}
+
+[data-theme="dark"] a:hover {
+    color: var(--accent) !important;
+}
+
+/* Fix text colors in dark mode for better contrast */
+[data-theme="dark"] .text-muted {
+    color: var(--muted-text) !important;
+}
+
+[data-theme="dark"] .card-header {
+    background-color: var(--tertiary-bg) !important;
+    border-bottom: 1px solid var(--border) !important;
+}
+
+/* Card styles for stat cards */
+[data-theme="dark"] .card.text-center {
+    background-color: var(--tertiary-bg) !important;
+}
+
+[data-theme="dark"] .card.text-center .card-body h5 {
+    color: var(--muted-text) !important;
+}
+
+[data-theme="dark"] .card.text-center .card-body .display-6 {
+    color: var(--accent) !important;
+}
+
+/* Badge styling for better contrast */
+[data-theme="dark"] .badge {
+    color: var(--content-text) !important;
+}
+
+/* Navbar adjustments */
+[data-theme="dark"] .navbar {
+    background-color: var(--tertiary-bg) !important;
+}
+
+/* Theme toggle button */
+[data-theme="dark"] .theme-toggle {
+    background-color: var(--tertiary-bg) !important;
+    color: var(--content-text) !important;
+}
+
+/* Button text color fixes for dark mode */
+[data-theme="dark"] .btn-custom,
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .nav-link,
+[data-theme="dark"] a.btn {
+    color: var(--button-text) !important;
+}
+
+[data-theme="dark"] .navbar-nav .nav-link {
+    color: var(--button-text) !important;
+}
+
+/* Fix for button icons */
+[data-theme="dark"] .btn i,
+[data-theme="dark"] .nav-link i {
+    color: var(--button-text) !important;
+}
+
+/* Analytics and export buttons */
+[data-theme="dark"] a[href*="analytics"],
+[data-theme="dark"] a[href*="export"] {
+    color: var(--button-text) !important;
+}
+
+[data-theme="dark"] .list-group-item {
+    background-color: var(--secondary-bg) !important;
+    color: var(--content-text) !important;
+}
+
+[data-theme="dark"] .form-control {
+    background-color: #1a1a1a !important;
+    color: var(--content-text) !important;
+    border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .btn-custom {
+    background-color: var(--search-btn-bg) !important;
+}

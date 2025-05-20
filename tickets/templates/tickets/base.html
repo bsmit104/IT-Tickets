@@ -1,0 +1,155 @@
+<!doctype html>
+<html data-theme="light">
+  <head>
+    {% load django_bootstrap5 %} {% load static %} {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=1.6" />
+    <title>{% block title %}Ticket Tracker{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+      /* Override any potential bootstrap colors */
+      :root {
+        --bg: #f5f8fc !important;
+        --highlight: #2c6ed1 !important;
+        --text: #2c3e50 !important;
+        --accent: #1d5daa !important;
+        --button: #0d47a1 !important;
+        --button-text: #ffffff !important;
+        --card-bg: #ffffff !important;
+        --border: #d9e1ea !important;
+      }
+      
+      /* Force navbar styling */
+      .navbar {
+        background-color: var(--card-bg) !important;
+        border-bottom: 1px solid var(--border) !important;
+      }
+      
+      /* Force list item styling */
+      .list-group-item {
+        background-color: var(--card-bg) !important;
+        border-color: var(--border) !important;
+      }
+      
+      /* Force any brown-tinted elements to use our colors */
+      [style*="background-color"] {
+        background-color: var(--card-bg) !important;
+      }
+      
+      body[data-theme="dark"] {
+        --bg: #121212 !important;
+        --highlight: #1976d2 !important;
+        --text: #e0e0e0 !important;
+        --accent: #0d47a1 !important;
+        --button: #1565c0 !important;
+        --card-bg: #1e1e1e !important;
+        --border: #333333 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'ticket_list' %}">
+          <i class="fas fa-ticket-alt me-2"></i>IT Ticketing System
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'ticket_list' %}">
+                <i class="fas fa-list-ul me-1"></i> Tickets
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'ticket_chart' %}">
+                <i class="fas fa-chart-bar me-1"></i> Analytics
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'add_ticket' %}">
+                <i class="fas fa-plus-circle me-1"></i> New Ticket
+              </a>
+            </li>
+            <li class="nav-item">
+              <form id="logout-form" method="post" action="{% url 'logout' %}" class="nav-item">
+                {% csrf_token %}
+                <button type="submit" class="nav-link border-0 bg-transparent">
+                  <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </button>
+              </form>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">
+                <i class="fas fa-sign-in-alt me-1"></i> Login
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="theme-toggle" id="theme-toggle">
+      <i class="fas fa-moon" id="theme-icon"></i>
+    </div>
+
+    <div class="container mt-4">
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </div>
+
+    {% bootstrap_javascript %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+        
+        // Check for saved theme preference or use default
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.dataset.theme = savedTheme;
+        document.body.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+        
+        // Toggle theme on click
+        themeToggle.addEventListener('click', function() {
+          const currentTheme = htmlElement.dataset.theme;
+          const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+          
+          htmlElement.dataset.theme = newTheme;
+          document.body.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+          updateIcon(newTheme);
+        });
+        
+        function updateIcon(theme) {
+          if (theme === 'dark') {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+          } else {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
