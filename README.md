@@ -4,7 +4,7 @@ A comprehensive Django-based ticketing system specifically designed for campus I
 
 ## Demo Video
 
-[![Campus Fix-It IT Demo](https://img.youtube.com/vi/pZKruNWhr5M/0.jpg)](https://youtu.be/pZKruNWhr5M)
+[![Campus Fix-It IT Demo](https://img.youtube.com/vi/r4GnLjBfXlA/0.jpg)](https://youtu.be/r4GnLjBfXlA)
 
 *Click the thumbnail above to watch the demo on YouTube*
 
