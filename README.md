@@ -4,9 +4,9 @@ A comprehensive Django-based ticketing system specifically designed for campus I
 
 ## Demo Video
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/pZKruNWhr5M?si=J7S-ArRpY_K1lOyA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Campus Fix-It IT Demo](https://img.youtube.com/vi/pZKruNWhr5M/0.jpg)](https://youtu.be/pZKruNWhr5M)
 
-*Note: If the embed above doesn't display, [click here to watch the demo on YouTube](https://www.youtube.com/watch?v=pZKruNWhr5M)*
+*Click the thumbnail above to watch the demo on YouTube*
 
 ## Key Features
 
@@ -96,13 +96,10 @@ Visit http://127.0.0.1:8000/ in your browser to access the application.
 - **Student Help Desks**: Streamline support for student technology needs
 
 ## Screenshots
-![Dashboard View](screenshots/dashboard.png)
-![Ticket Detail](screenshots/ticket_detail.png)
-![Analytics Page](screenshots/analytics.png)
-![Public Submission Form](screenshots/public_form.png)
-
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+![Dashboard View](screenshots/dashboard.gif)
+![Ticket Detail](screenshots/ticket_detail.gif)
+![Analytics Page](screenshots/analytics.gif)
+![Public Submission Form](screenshots/public_form.gif)
 
 ## Contact
 For questions, customizations, or support, please contact:
