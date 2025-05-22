@@ -1,0 +1,114 @@
+{% extends 'tickets/base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}All Tickets{% endblock %}
+{% block content %}
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <h1 class="h3 mb-0">All Tickets</h1>
+            <p class="text-muted mb-0">Viewing all tickets in the system</p>
+        </div>
+        <div class="col-md-6 text-end d-flex justify-content-end flex-wrap gap-2">
+            {% if user.is_authenticated %}
+            <a href="{% url 'ticket_list' %}" class="btn btn-custom">
+                <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+            <a href="{% url 'completed_tickets' %}" class="btn btn-custom">
+                <i class="fas fa-check-circle me-1"></i> Completed Tickets
+            </a>
+            <a href="{% url 'export_tickets' %}" class="btn btn-custom">
+                <i class="fas fa-download me-1"></i> Export CSV
+            </a>
+            <a href="{% url 'add_ticket' %}" class="btn btn-custom">
+                <i class="fas fa-plus-circle me-1"></i> New Ticket
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+        <!-- Search Form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-2 align-items-center">
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search all tickets by title, assignee, location, etc...">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-custom w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tickets Table -->
+        <div class="card mb-4">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>All Tickets</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Assignee</th>
+                            <th>Filer's Name</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                            <tr>
+                                <td><a href="{% url 'ticket_detail' ticket.pk %}">{{ ticket.title }}</a></td>
+                                <td>
+                                    {% if ticket.status == 'OPEN' %}
+                                        <span class="badge bg-warning text-dark">Open</span>
+                                    {% elif ticket.status == 'IN_PROGRESS' %}
+                                        <span class="badge bg-primary">In Progress</span>
+                                    {% elif ticket.status == 'RESOLVED' %}
+                                        <span class="badge bg-success">Resolved</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Closed</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if ticket.priority == 'CRITICAL' %}
+                                        <span class="badge bg-danger">Critical</span>
+                                    {% elif ticket.priority == 'HIGH' %}
+                                        <span class="badge bg-danger">High</span>
+                                    {% elif ticket.priority == 'MEDIUM' %}
+                                        <span class="badge bg-warning text-dark">Medium</span>
+                                    {% else %}
+                                        <span class="badge bg-info">Low</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ ticket.assignee.username|default:"Unassigned" }}</td>
+                                <td>{{ ticket.user_name|default:"Not provided" }}</td>
+                                <td>{{ ticket.created_at|date:"Y-m-d" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="6" class="text-center py-4">No tickets found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="card text-center p-5">
+            <div class="card-body">
+                <i class="fas fa-user-lock fa-4x mb-3 text-muted"></i>
+                <h2>Welcome to IT Support Ticketing System</h2>
+                <p class="lead text-muted mb-4">Please log in to manage support tickets.</p>
+                <a href="{% url 'login' %}" class="btn btn-custom btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %} 

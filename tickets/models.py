@@ -26,6 +26,13 @@ class Ticket(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     resolution_notes = models.TextField(blank=True)
 
+    # User information fields
+    user_name = models.CharField(max_length=100, blank=True)
+    user_email = models.EmailField(max_length=100, blank=True)
+    user_phone = models.CharField(max_length=50, blank=True)
+    user_role = models.CharField(max_length=50, blank=True)
+    user_location = models.CharField(max_length=100, blank=True)
+
     def __str__(self):
         return self.title
 

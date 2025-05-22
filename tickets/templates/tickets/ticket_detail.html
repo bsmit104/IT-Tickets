@@ -12,7 +12,7 @@
                 </span>
                 <span class="me-3">
                     <i class="fas fa-user me-1"></i> 
-                    {{ ticket.created_by.username }}
+                    {{ ticket.user_name|default:"Unknown filer" }}
                 </span>
                 <span>
                     {% if ticket.status == 'OPEN' %}
@@ -26,7 +26,9 @@
                     {% endif %}
                 </span>
                 <span class="ms-2">
-                    {% if ticket.priority == 'HIGH' %}
+                    {% if ticket.priority == 'CRITICAL' %}
+                        <span class="badge bg-danger">Critical Priority</span>
+                    {% elif ticket.priority == 'HIGH' %}
                         <span class="badge bg-danger">High Priority</span>
                     {% elif ticket.priority == 'MEDIUM' %}
                         <span class="badge bg-warning text-dark">Medium Priority</span>
@@ -88,6 +90,34 @@
                     </div>
                 </div>
             </div>
+
+    <div class="card mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0"><i class="fas fa-user me-2"></i>User Information</h5>
+                </div>
+        <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3 fw-bold">Name:</div>
+                        <div class="col-md-9">{{ ticket.user_name|default:"Not provided" }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3 fw-bold">Email:</div>
+                        <div class="col-md-9">{{ ticket.user_email|default:"Not provided" }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3 fw-bold">Phone:</div>
+                        <div class="col-md-9">{{ ticket.user_phone|default:"Not provided" }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3 fw-bold">Role:</div>
+                        <div class="col-md-9">{{ ticket.user_role|default:"Not provided" }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 fw-bold">Location:</div>
+                        <div class="col-md-9">{{ ticket.user_location|default:"Not provided" }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="col-lg-4">
@@ -96,10 +126,10 @@
                     <h5 class="mb-0"><i class="fas fa-history me-2"></i>Edit History</h5>
                 </div>
                 <div class="card-body p-0">
-                    {% if ticket_history %}
+            {% if ticket_history %}
                         <ul class="list-group list-group-flush">
-                            {% for entry in ticket_history %}
-                                <li class="list-group-item">
+                    {% for entry in ticket_history %}
+                        <li class="list-group-item">
                                     <div class="d-flex justify-content-between">
                                         <span class="fw-bold">{{ entry.user }}</span>
                                         <small class="text-muted">{{ entry.timestamp|timesince }} ago</small>
@@ -109,16 +139,16 @@
                                         <span class="fst-italic">"{{ entry.old_value }}"</span> to 
                                         <span class="fw-semibold">"{{ entry.new_value }}"</span>
                                     </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
                         <div class="text-center p-4 text-muted">
                             <i class="fas fa-info-circle me-1"></i> No edit history recorded
                         </div>
-                    {% endif %}
-                </div>
-            </div>
+            {% endif %}
+        </div>
+    </div>
         </div>
     </div>
 {% endblock %}

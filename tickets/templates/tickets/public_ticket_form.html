@@ -1,0 +1,263 @@
+{% extends 'tickets/base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}Campus IT Support - Submit a Request{% endblock %}
+{% block content %}
+<style>
+.card {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    border: 1px solid rgba(0,0,0,.125);
+}
+</style>
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Header Banner -->
+        <div class="card text-center mb-4">
+            <div class="card-body bg-primary text-white py-4">
+                <h1 class="display-5 fw-bold">Campus Fix-it IT</h1>
+                <p class="lead mb-0">Quick & easy tech support for students, faculty & staff</p>
+            </div>
+        </div>
+
+        <!-- Main Form Card -->
+        <div class="card">
+            <div class="card-header bg-white py-3">
+                <h4 class="mb-0">
+                    <i class="fas fa-laptop-medical me-2 text-primary"></i>Submit a Support Request
+                </h4>
+                <p class="text-muted mb-0 mt-2">Our tech team typically responds within 24 hours during business days</p>
+            </div>
+            <div class="card-body p-4">
+                {% if form_submitted %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Success!</strong> Your support request has been submitted. Ticket number: #{{ ticket_id }}
+                        <p class="mb-0 mt-2">We'll contact you soon regarding your request.</p>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-custom">
+                            <i class="fas fa-plus-circle me-1"></i> Submit Another Request
+                        </a>
+                    </div>
+                {% else %}
+                    <form method="post" class="ticket-form">
+                        {% csrf_token %}
+                        
+                        <!-- Common Issues Quick Select -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Common Issues</label>
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    <button type="button" class="btn btn-outline-primary w-100 issue-btn" data-issue="wifi">
+                                        <i class="fas fa-wifi me-2"></i>WiFi Problems
+                                    </button>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <button type="button" class="btn btn-outline-primary w-100 issue-btn" data-issue="password">
+                                        <i class="fas fa-key me-2"></i>Password Reset
+                                    </button>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <button type="button" class="btn btn-outline-primary w-100 issue-btn" data-issue="software">
+                                        <i class="fas fa-download me-2"></i>Software Access
+                                    </button>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <button type="button" class="btn btn-outline-primary w-100 issue-btn" data-issue="printing">
+                                        <i class="fas fa-print me-2"></i>Printing Issues
+                                    </button>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <button type="button" class="btn btn-outline-primary w-100 issue-btn" data-issue="email">
+                                        <i class="fas fa-envelope me-2"></i>Email Problems
+                                    </button>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <button type="button" class="btn btn-outline-primary w-100 issue-btn" data-issue="other">
+                                        <i class="fas fa-question-circle me-2"></i>Other Issue
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label fw-bold">Your Name*</label>
+                                    <input type="text" name="name" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label fw-bold">Email Address*</label>
+                                    <input type="email" name="email" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label fw-bold">Phone Number</label>
+                                    <input type="tel" name="phone" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label fw-bold">Your Role*</label>
+                                    <select name="role" class="form-select" required>
+                                        <option value="">Please select...</option>
+                                        <option value="student">Student</option>
+                                        <option value="faculty">Faculty</option>
+                                        <option value="staff">Staff</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-bold">Location/Building*</label>
+                            <select name="location" class="form-select" required>
+                                <option value="">Please select...</option>
+                                <option value="library">University Library</option>
+                                <option value="science">Science Building</option>
+                                <option value="admin">Administration</option>
+                                <option value="dorm">Residence Halls</option>
+                                <option value="student_center">Student Center</option>
+                                <option value="remote">Remote/Off Campus</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Ticket Details -->
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-bold">Subject/Title*</label>
+                            <input type="text" name="title" id="ticket_title" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-bold">Priority*</label>
+                            <select name="priority" class="form-select" required>
+                                <option value="LOW">Low - When convenient</option>
+                                <option value="MEDIUM" selected>Medium - Normal priority</option>
+                                <option value="HIGH">High - Significant impact</option>
+                                <option value="CRITICAL">Critical - Unable to work</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">Description*</label>
+                            <textarea name="description" id="ticket_description" class="form-control" rows="5" required 
+                                      placeholder="Please describe your issue in detail. Include any error messages, what you were trying to do, and steps you've already taken."></textarea>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-custom btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Support Request
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+            <!-- Info Footer -->
+            <div class="card-footer bg-light">
+                <div class="row">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-phone-alt fa-2x text-primary me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark">IT Help Desk</h6>
+                                <p class="mb-0 text-dark">555-123-4567</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-clock fa-2x text-primary me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark">Hours</h6>
+                                <p class="mb-0 text-dark">Mon-Fri: 8am-6pm</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-map-marker-alt fa-2x text-primary me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark">Location</h6>
+                                <p class="mb-0 text-dark">Tech Center, Room 101</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle quick issue selection
+    const issueButtons = document.querySelectorAll('.issue-btn');
+    const titleField = document.getElementById('ticket_title');
+    const descriptionField = document.getElementById('ticket_description');
+    
+    const issueTemplates = {
+        'wifi': {
+            title: 'Cannot connect to campus WiFi',
+            description: 'I am having trouble connecting to the campus WiFi network. \n\nDevice type: \nLocation: \nWhen did the problem start: \nHave you been able to connect before: '
+        },
+        'password': {
+            title: 'Need password reset',
+            description: 'I need assistance with resetting my password. \n\nAccount type (email, portal, etc.): \nUsername: \nStudent/Employee ID: '
+        },
+        'software': {
+            title: 'Software installation/access request',
+            description: 'I need help with software installation or access. \n\nSoftware name: \nFor which course/department: \nDevice type: '
+        },
+        'printing': {
+            title: 'Printer/scanning issue',
+            description: 'I am experiencing problems with printing or scanning. \n\nPrinter location: \nError message (if any): \nWhat were you trying to print/scan: '
+        },
+        'email': {
+            title: 'Email access problem',
+            description: 'I am having trouble with my campus email. \n\nEmail address: \nDevice you are using: \nSpecific error message: \nWhat exactly happens when you try to access email: '
+        },
+        'other': {
+            title: '',
+            description: 'Please describe your issue in detail: \n\n- What were you trying to do?\n- What device are you using?\n- When did the problem start?\n- Any error messages you received?'
+        }
+    };
+    
+    issueButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const issueType = this.getAttribute('data-issue');
+            const template = issueTemplates[issueType];
+            
+            // Remove active class from all buttons
+            issueButtons.forEach(btn => btn.classList.remove('active', 'btn-primary', 'text-white'));
+            btn.classList.add('btn-outline-primary');
+            
+            // Add active class to clicked button
+            this.classList.add('active', 'btn-primary', 'text-white');
+            this.classList.remove('btn-outline-primary');
+            
+            // Fill in form fields
+            titleField.value = template.title;
+            descriptionField.value = template.description;
+            
+            // Focus on the title field if it's empty
+            if (template.title === '') {
+                titleField.focus();
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 

@@ -1,13 +1,14 @@
 {% extends 'tickets/base.html' %}
 {% load django_bootstrap5 %}
-{% block title %}Ticket Dashboard{% endblock %}
+{% block title %}Open Tickets Dashboard{% endblock %}
 {% block content %}
     <div class="row align-items-center mb-4">
         <div class="col-md-6">
-            <h1 class="h3 mb-0">IT Support Dashboard</h1>
+            <h1 class="h3 mb-0">Open Tickets Dashboard</h1>
+            <p class="text-muted mb-0">Showing top 10 priority-sorted open tickets</p>
         </div>
         <div class="col-md-6 text-md-end">
-            {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
             <a href="{% url 'export_tickets' %}" class="btn btn-custom">
                 <i class="fas fa-download me-1"></i> Export CSV
             </a>
@@ -25,8 +26,8 @@
                 <div class="card text-center">
                     <div class="card-body">
                         <i class="fas fa-ticket-alt fa-2x mb-2 text-primary"></i>
-                        <h5>Total Tickets</h5>
-                        <p class="display-6">{{ total_tickets }}</p>
+                        <h5>Open Tickets</h5>
+                        <p class="display-6">{{ total_open_tickets }}</p>
                     </div>
                 </div>
             </div>
@@ -55,11 +56,11 @@
             <div class="card-body">
                 <form method="get" class="row g-2 align-items-center">
                     <div class="col-md-10">
-                        <div class="input-group">
+            <div class="input-group">
                             <span class="input-group-text bg-white">
                                 <i class="fas fa-search"></i>
                             </span>
-                            <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search tickets...">
+                <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search open tickets by title, assignee, location, etc...">
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -72,27 +73,35 @@
         <!-- Tickets Table -->
         <div class="card mb-4">
             <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Ticket List</h5>
-                <a href="{% url 'ticket_chart' %}" class="btn btn-sm btn-custom">
-                    <i class="fas fa-chart-bar me-1"></i> View Analytics
-                </a>
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Open Tickets (Top 10 by Priority)</h5>
+                <div>
+                    <a href="{% url 'completed_tickets' %}" class="btn btn-sm btn-custom me-1">
+                        <i class="fas fa-check-circle me-1"></i> Completed Tickets
+                    </a>
+                    <a href="{% url 'all_tickets' %}" class="btn btn-sm btn-custom me-1">
+                        <i class="fas fa-list-alt me-1"></i> All Tickets
+                    </a>
+                    <a href="{% url 'ticket_chart' %}" class="btn btn-sm btn-custom">
+                        <i class="fas fa-chart-bar me-1"></i> View Analytics
+                    </a>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                            <th>Assignee</th>
-                            <th>Created By</th>
-                            <th>Created At</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for ticket in tickets %}
-                            <tr>
-                                <td><a href="{% url 'ticket_detail' ticket.pk %}">{{ ticket.title }}</a></td>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Assignee</th>
+                    <th>Filer's Name</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td><a href="{% url 'ticket_detail' ticket.pk %}">{{ ticket.title }}</a></td>
                                 <td>
                                     {% if ticket.status == 'OPEN' %}
                                         <span class="badge bg-warning text-dark">Open</span>
@@ -105,7 +114,9 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if ticket.priority == 'HIGH' %}
+                                    {% if ticket.priority == 'CRITICAL' %}
+                                        <span class="badge bg-danger">Critical</span>
+                                    {% elif ticket.priority == 'HIGH' %}
                                         <span class="badge bg-danger">High</span>
                                     {% elif ticket.priority == 'MEDIUM' %}
                                         <span class="badge bg-warning text-dark">Medium</span>
@@ -113,15 +124,15 @@
                                         <span class="badge bg-info">Low</span>
                                     {% endif %}
                                 </td>
-                                <td>{{ ticket.assignee.username|default:"Unassigned" }}</td>
-                                <td>{{ ticket.created_by.username }}</td>
-                                <td>{{ ticket.created_at|date:"Y-m-d" }}</td>
-                            </tr>
-                        {% empty %}
+                        <td>{{ ticket.assignee.username|default:"Unassigned" }}</td>
+                        <td>{{ ticket.user_name|default:"Not provided" }}</td>
+                        <td>{{ ticket.created_at|date:"Y-m-d" }}</td>
+                    </tr>
+                {% empty %}
                             <tr><td colspan="6" class="text-center py-4">No tickets found.</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                {% endfor %}
+            </tbody>
+        </table>
             </div>
         </div>
 
@@ -134,14 +145,14 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            {% for ticket in recently_viewed %}
+            {% for ticket in recently_viewed %}
                                 <li class="list-group-item px-0">
                                     <a href="{% url 'ticket_detail' ticket.pk %}">{{ ticket.title }}</a>
                                 </li>
-                            {% empty %}
+            {% empty %}
                                 <li class="list-group-item px-0 text-muted">No recently viewed tickets.</li>
-                            {% endfor %}
-                        </ul>
+            {% endfor %}
+        </ul>
                     </div>
                 </div>
             </div>
@@ -153,17 +164,17 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            {% for action in recent_actions %}
+            {% for action in recent_actions %}
                                 <li class="list-group-item px-0">
                                     <span class="fw-bold">{{ action.user }}</span>
                                     {{ action.action }}
                                     <span class="text-primary">{{ action.ticket_title }}</span>
                                     <span class="text-muted float-end">{{ action.timestamp|timesince }} ago</span>
                                 </li>
-                            {% empty %}
+            {% empty %}
                                 <li class="list-group-item px-0 text-muted">No recent actions.</li>
-                            {% endfor %}
-                        </ul>
+            {% endfor %}
+        </ul>
                     </div>
                 </div>
             </div>
@@ -174,9 +185,6 @@
                 <i class="fas fa-user-lock fa-4x mb-3 text-muted"></i>
                 <h2>Welcome to IT Support Ticketing System</h2>
                 <p class="lead text-muted mb-4">Please log in to manage support tickets.</p>
-                <a href="{% url 'login' %}" class="btn btn-custom btn-lg">
-                    <i class="fas fa-sign-in-alt me-2"></i>Login
-                </a>
             </div>
         </div>
     {% endif %}
